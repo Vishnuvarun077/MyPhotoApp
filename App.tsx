@@ -1,20 +1,35 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+// MyPhotoApp/App.tsx
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import CameraScreen from './screens/CameraScreen';
+import PreviewScreen from './screens/PreviewScreen';
+import GalleryScreen from './screens/GalleryScreen';
 
-export default function App() {
+export type RootStackParamList = {
+  Camera: undefined;
+  Preview: { photoUri: string };
+  Gallery: undefined;
+};
+
+const Stack = createStackNavigator<RootStackParamList>();
+
+const App: React.FC = () => {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <SafeAreaProvider>
+      <NavigationContainer>
+        <Stack.Navigator
+          initialRouteName="Camera"
+          screenOptions={{ headerShown: false }}
+        >
+          <Stack.Screen name="Camera" component={CameraScreen} />
+          <Stack.Screen name="Preview" component={PreviewScreen} />
+          <Stack.Screen name="Gallery" component={GalleryScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </SafeAreaProvider>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;
