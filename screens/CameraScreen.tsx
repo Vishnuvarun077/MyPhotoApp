@@ -1,4 +1,3 @@
-// MyPhotoApp/screens/CameraScreen.tsx
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -14,29 +13,49 @@ type Props = {
 };
 
 const CameraScreen: React.FC<Props> = ({ navigation }) => {
-  const { photo, takePhoto, pickImage } = usePhotoHandler();
+  const { takePhoto, pickImage } = usePhotoHandler();
+
+  // Launch camera for taking a new photo with editing enabled
+  const handleTakePhoto = async () => {
+    const photoUri = await takePhoto();
+    if (photoUri) {
+      navigation.navigate('Preview', { photoUri });
+    }
+  };
+
+  // Launch image picker from gallery with editing enabled
+  const handlePickImage = async () => {
+    const photoUri = await pickImage();
+    if (photoUri) {
+      navigation.navigate('Preview', { photoUri });
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.buttonContainer}>
-        <Button title="Take Photo" onPress={takePhoto} />
-        <Button title="Pick an Image" onPress={pickImage} containerStyle={styles.buttonSpacing} />
-        {photo && (
-          <Button
-            title="Preview Photo"
-            onPress={() => navigation.navigate('Preview', { photoUri: photo.uri })}
-            containerStyle={styles.buttonSpacing}
-          />
-        )}
+        <Button title="Take Photo" onPress={handleTakePhoto} />
+        <Button title="Pick Image" onPress={handlePickImage} containerStyle={styles.buttonSpacing} />
+        <Button title="Go to Gallery" onPress={() => navigation.navigate('Gallery')} containerStyle={styles.buttonSpacing} />
       </View>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#fff', justifyContent: 'center', alignItems: 'center', padding: 16 },
-  buttonContainer: { width: '100%' },
-  buttonSpacing: { marginTop: 16 },
+  container: { 
+    flex: 1, 
+    backgroundColor: '#fff',
+    justifyContent: 'center', 
+    alignItems: 'center',
+    padding: 16 
+  },
+  buttonContainer: { 
+    width: '100%' 
+  },
+  buttonSpacing: { 
+    marginTop: 16 
+  },
 });
 
 export default CameraScreen;

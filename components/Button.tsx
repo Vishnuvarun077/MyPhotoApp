@@ -1,13 +1,5 @@
-// MyPhotoApp/components/Button.tsx
 import React from 'react';
-import {
-  TouchableOpacity,
-  Text,
-  StyleSheet,
-  GestureResponderEvent,
-  ViewStyle,
-  TextStyle,
-} from 'react-native';
+import { TouchableOpacity, Text, StyleSheet, GestureResponderEvent, ViewStyle, TextStyle } from 'react-native';
 
 interface ButtonProps {
   title: string;

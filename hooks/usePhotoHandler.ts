@@ -1,56 +1,41 @@
-// MyPhotoApp/hooks/usePhotoHandler.ts
-import { useState } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 
-export type Photo = {
-  uri: string;
-};
-
 const usePhotoHandler = () => {
-  const [photo, setPhoto] = useState<Photo | null>(null);
-
-  const requestCameraPermission = async () => {
+  // Uses the camera. Allows editing (cropping) to be done.
+  const takePhoto = async (): Promise<string | null> => {
     const { status } = await ImagePicker.requestCameraPermissionsAsync();
-    return status === 'granted';
-  };
-
-  const requestMediaLibraryPermission = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    return status === 'granted';
-  };
-
-  const takePhoto = async () => {
-    if (!(await requestCameraPermission())) {
+    if (status !== 'granted') {
       alert('Camera permission denied');
-      return;
+      return null;
     }
     const result = await ImagePicker.launchCameraAsync({
       allowsEditing: true,
       quality: 1,
     });
-    if (!result.canceled) {
-      // result.assets is an array; grab the first photo
-      setPhoto({ uri: result.assets[0].uri });
+    if (!result.canceled && result.assets && result.assets.length > 0) {
+      return result.assets[0].uri;
     }
+    return null;
   };
 
-  const pickImage = async () => {
-    if (!(await requestMediaLibraryPermission())) {
+  // Uses image picker from the device gallery. Allows editing (cropping).
+  const pickImage = async (): Promise<string | null> => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== 'granted') {
       alert('Media library permission denied');
-      return;
+      return null;
     }
     const result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
       quality: 1,
     });
-    if (!result.canceled) {
-      setPhoto({ uri: result.assets[0].uri });
+    if (!result.canceled && result.assets && result.assets.length > 0) {
+      return result.assets[0].uri;
     }
+    return null;
   };
 
-  const clearPhoto = () => setPhoto(null);
-
-  return { photo, takePhoto, pickImage, clearPhoto, setPhoto };
+  return { takePhoto, pickImage };
 };
 
 export default usePhotoHandler;
