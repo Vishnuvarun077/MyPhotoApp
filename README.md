@@ -40,7 +40,7 @@ This project demonstrates the following functionality:
 
 ```
 MyPhotoApp/
-├── assets/                  # Static assets (if required)
+├── assets/                  # Static assets 
 ├── components/
 │   └── Button.tsx           # Reusable button component
 ├── hooks/
@@ -59,7 +59,7 @@ MyPhotoApp/
 1. **Clone the Repository:**
 
    ```
-   git clone <repository-url>
+   git clone git@github.com:Vishnuvarun077/MyPhotoApp.git
    cd MyPhotoApp
    ```
 
